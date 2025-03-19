@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Billing</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Bill ID</th><th>Order ID</th><th>Total Amount</th><th>Payment Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for bill in bills %}
+        <tr>
+            <td>{{ bill.id }}</td>
+            <td>{{ bill.order_id }}</td>
+            <td>{{ bill.amount }}</td>
+            <td>{{ bill.payment_status }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
