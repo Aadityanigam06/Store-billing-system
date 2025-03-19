@@ -1,0 +1,89 @@
+mysql> use cloth_store;
+Database changed
+mysql> show tables;
++-----------------------+
+| Tables_in_cloth_store |
++-----------------------+
+| bill                  |
+| category              |
+| customer              |
+| employee              |
+| orderdetails          |
+| orders                |
+| payment               |
+| product               |
++-----------------------+
+8 rows in set (0.01 sec)
+
+mysql> SELECT o.order_id, c.name AS customer_name, e.name AS employee_name, o.order_date
+    -> FROM Orders o
+    -> JOIN Customer c ON o.customer_id = c.customer_id
+    -> JOIN Employee e ON o.employee_id = e.employee_id;
++----------+---------------+---------------+---------------------+
+| order_id | customer_name | employee_name | order_date          |
++----------+---------------+---------------+---------------------+
+|        1 | Rahul Singh   | Amit Sharma   | 2025-03-07 12:47:33 |
+|        2 | Priya Mehta   | Rohit Verma   | 2025-03-07 12:47:33 |
+|        3 | Ankit Kumar   | Sneha Roy     | 2025-03-07 12:47:33 |
++----------+---------------+---------------+---------------------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT b.bill_id, o.order_id, c.name AS customer_name, p.payment_mode, b.total_amount
+    -> FROM Bill b
+    -> JOIN Orders o ON b.order_id = o.order_id
+    -> JOIN Customer c ON o.customer_id = c.customer_id
+    -> JOIN Payment p ON b.payment_id = p.payment_id;
++---------+----------+---------------+--------------+--------------+
+| bill_id | order_id | customer_name | payment_mode | total_amount |
++---------+----------+---------------+--------------+--------------+
+|       1 |        1 | Rahul Singh   | Credit Card  |      1999.99 |
+|       2 |        2 | Priya Mehta   | Cash         |      2499.00 |
+|       3 |        3 | Ankit Kumar   | UPI          |       999.50 |
++---------+----------+---------------+--------------+--------------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT od.order_details_id, o.order_id, c.name AS customer_name, p.name AS product_name, od.quantity
+    -> FROM OrderDetails od
+    -> JOIN Orders o ON od.order_id = o.order_id
+    -> JOIN Customer c ON o.customer_id = c.customer_id
+    -> JOIN Product p ON od.product_id = p.product_id;
++------------------+----------+---------------+--------------+----------+
+| order_details_id | order_id | customer_name | product_name | quantity |
++------------------+----------+---------------+--------------+----------+
+|                1 |        1 | Rahul Singh   | T-Shirt      |        2 |
+|                2 |        2 | Priya Mehta   | Jeans        |        1 |
+|                3 |        3 | Ankit Kumar   | Dress        |        1 |
++------------------+----------+---------------+--------------+----------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT p.product_id, p.name AS product_name, p.price, c.name AS category_name
+    -> FROM Product p
+    -> JOIN Category c ON p.category_id = c.category_id;
++------------+--------------+---------+----------------+
+| product_id | product_name | price   | category_name  |
++------------+--------------+---------+----------------+
+|          1 | T-Shirt      |  499.99 | Men Clothing   |
+|          2 | Jeans        |  999.50 | Men Clothing   |
+|          3 | Dress        | 1499.00 | Women Clothing |
++------------+--------------+---------+----------------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT o.order_id, c.name AS customer_name, e.name AS employee_name,
+    ->        p.name AS product_name, od.quantity, b.total_amount, pm.payment_mode
+    -> FROM Orders o
+    -> JOIN Customer c ON o.customer_id = c.customer_id
+    -> JOIN Employee e ON o.employee_id = e.employee_id
+    -> JOIN OrderDetails od ON o.order_id = od.order_id
+    -> JOIN Product p ON od.product_id = p.product_id
+    -> JOIN Bill b ON o.order_id = b.order_id
+    -> JOIN Payment pm ON b.payment_id = pm.payment_id;
++----------+---------------+---------------+--------------+----------+--------------+--------------+
+| order_id | customer_name | employee_name | product_name | quantity | total_amount | payment_mode |
++----------+---------------+---------------+--------------+----------+--------------+--------------+
+|        1 | Rahul Singh   | Amit Sharma   | T-Shirt      |        2 |      1999.99 | Credit Card  |
+|        2 | Priya Mehta   | Rohit Verma   | Jeans        |        1 |      2499.00 | Cash         |
+|        3 | Ankit Kumar   | Sneha Roy     | Dress        |        1 |       999.50 | UPI          |
++----------+---------------+---------------+--------------+----------+--------------+--------------+
+3 rows in set (0.00 sec)
+
+mysql>
